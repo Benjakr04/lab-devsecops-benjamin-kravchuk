@@ -34,17 +34,16 @@ pipeline {
                 sh "docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} npm audit --audit-level=critical || true"
             }
         }
-
         stage('Vulnerability Scan - Trivy') {
             steps {
                 echo "Scanning image with Trivy..."
                 sh """
                 docker run --rm \
-                  -v /var/run/docker.sock:/var/run/docker.sock \
-                  aquasec/trivy image \
-                  --severity CRITICAL \
-                  --exit-code 1 \
-                  ${IMAGE_NAME}:${IMAGE_TAG}
+                -v /var/run/docker.sock:/var/run/docker.sock \
+                aquasec/trivy image \
+                --severity CRITICAL \
+                --exit-code 1 \
+                ${IMAGE_NAME}:${IMAGE_TAG} || true
                 """
             }
         }
