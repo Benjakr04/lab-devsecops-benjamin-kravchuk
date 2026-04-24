@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        NEXUS_URL = "http://nexus:8082"
-        NEXUS_HOST = "nexus:8082"
+        NEXUS_URL = "http://172.19.0.3:8082"
+        NEXUS_HOST = "172.19.0.3:8082"
         CREDENTIALS_ID = "nexus-credentials"
         IMAGE_NAME = "sumador"
         IMAGE_TAG = "${env.BUILD_NUMBER}"
@@ -43,6 +43,7 @@ pipeline {
                 aquasec/trivy image \
                 --severity CRITICAL \
                 --exit-code 1 \
+                --timeout 10m \
                 ${IMAGE_NAME}:${IMAGE_TAG} || true
                 """
             }
